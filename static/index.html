@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaCraft AI - Java & OOP Intelligent Chatbot</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for crisp modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Top Navigation Bar -->
+        <header class="navbar">
+            <div class="nav-left">
+                <div class="brand">
+                    <span class="brand-icon">☕</span>
+                    <div class="brand-text">
+                        <h1>JavaCraft <span class="badge">OOP AI</span></h1>
+                        <p class="subtitle">Interactive Java & Object-Oriented Assistant</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-center">
+                <div class="system-status" id="systemStatus">
+                    <span class="status-dot"></span>
+                    <span id="jdkVersionText">Connecting to JDK...</span>
+                </div>
+            </div>
+
+            <div class="nav-right">
+                <button class="nav-btn" id="toggleTopicsBtn" title="Browse OOP Topics">
+                    <span>📚 Topics</span>
+                </button>
+                <button class="nav-btn" id="toggleQuizBtn" title="Interactive OOP Quiz">
+                    <span>🧠 Quiz Mode</span>
+                </button>
+                <button class="nav-btn primary" id="togglePlaygroundBtn" title="Toggle Java Sandbox">
+                    <span>💻 Java Playground</span>
+                </button>
+                <button class="nav-btn icon-btn" id="themeToggleBtn" title="Toggle Theme">
+                    <span id="themeIcon">☀️</span>
+                </button>
+                <button class="nav-btn icon-btn" id="settingsBtn" title="Settings / API Key">
+                    <span>⚙️</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Workspace (Split Chat & Sandbox) -->
+        <main class="main-layout" id="mainLayout">
+            <!-- Left Side: Chat Interface -->
+            <section class="chat-section">
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Welcome Hero Card -->
+                    <div class="welcome-card" id="welcomeCard">
+                        <div class="welcome-avatar">☕</div>
+                        <h2>Master Java & Object-Oriented Programming</h2>
+                        <p>Ask anything about the <strong>4 Pillars</strong> (Encapsulation, Inheritance, Polymorphism, Abstraction), <strong>SOLID principles</strong>, <strong>Design Patterns</strong>, or paste your Java code to debug and run live.</p>
+                        
+                        <div class="quick-prompts-label">Quick Starters:</div>
+                        <div class="quick-prompts">
+                            <button class="prompt-chip" data-query="Explain the 4 Pillars of OOP in Java with real-world examples">
+                                🌟 4 Pillars of OOP
+                            </button>
+                            <button class="prompt-chip" data-query="Explain Polymorphism: Overloading vs Overriding with code">
+                                🎭 Polymorphism & Dynamic Dispatch
+                            </button>
+                            <button class="prompt-chip" data-query="What is the difference between Abstract Class and Interface in modern Java?">
+                                ⚖️ Abstract Class vs Interface
+                            </button>
+                            <button class="prompt-chip" data-query="Explain SOLID principles in Java with clean code">
+                                🏛️ SOLID Principles
+                            </button>
+                            <button class="prompt-chip" data-query="Show me Builder and Singleton design patterns in Java">
+                                🏗️ Design Patterns
+                            </button>
+                            <button class="prompt-chip" data-query="Explain equals() and hashCode() contract and why it matters">
+                                🤝 equals() & hashCode()
+                            </button>
+                            <button class="prompt-chip" data-query="How does Garbage Collection and Heap vs Stack memory work in Java?">
+                                🧠 Memory & GC
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input Controls -->
+                <div class="chat-input-area">
+                    <form id="chatForm" class="chat-form">
+                        <div class="input-wrapper">
+                            <textarea 
+                                id="userInput" 
+                                placeholder="Ask a Java or OOP question, or paste code to analyze... (Shift+Enter for new line)"
+                                rows="1"
+                                autofocus
+                            ></textarea>
+                            <button type="submit" id="sendBtn" class="send-button" title="Send (Enter)">
+                                <span>➤</span>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="input-footer">
+                        <span>Tip: Click <strong>"Run in Playground"</strong> on any code block to test it live with Java 23.</span>
+                        <button id="clearChatBtn" class="text-btn">Clear History</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Side: Java Code Playground / Compiler Sandbox -->
+            <section class="playground-section" id="playgroundSection">
+                <div class="playground-header">
+                    <div class="playground-title">
+                        <span class="icon">💻</span>
+                        <h3>Java 23 Sandbox</h3>
+                        <span class="file-name" id="currentFileName">Main.java</span>
+                    </div>
+                    <div class="playground-actions">
+                        <button class="btn btn-secondary btn-sm" id="loadSampleBtn" title="Load sample OOP code">Load Sample</button>
+                        <button class="btn btn-secondary btn-sm" id="formatCodeBtn" title="Reset Code">Reset</button>
+                        <button class="btn btn-primary btn-sm" id="runCodeBtn">
+                            <span class="play-icon">▶</span> Run Code
+                        </button>
+                        <button class="btn-close" id="closePlaygroundBtn" title="Close Playground">×</button>
+                    </div>
+                </div>
+
+                <div class="editor-container">
+                    <div class="editor-wrapper">
+                        <textarea id="codeEditor" spellcheck="false" placeholder="Write or paste your Java code here..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Terminal / Output Console -->
+                <div class="console-container">
+                    <div class="console-header">
+                        <span class="console-title">🖥️ Output Terminal</span>
+                        <div class="console-meta" id="consoleMeta">
+                            <span id="execStatus" class="exec-badge">Ready</span>
+                            <span id="execTime" class="exec-time"></span>
+                        </div>
+                        <button id="clearConsoleBtn" class="text-btn btn-sm">Clear</button>
+                    </div>
+                    <div class="console-output" id="consoleOutput">
+                        <pre>Java output will appear here after you click "Run Code"...</pre>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Topic Drawer / Sidebar Modal -->
+        <div class="modal-backdrop" id="topicsModal">
+            <div class="modal-content drawer-content">
+                <div class="modal-header">
+                    <h3>📚 Comprehensive Java & OOP Curriculum</h3>
+                    <button class="btn-close" id="closeTopicsBtn">×</button>
+                </div>
+                <div class="drawer-search-bar" style="padding: 12px 20px 0 20px;">
+                    <input type="text" id="topicSearchInput" placeholder="🔍 Search Java & OOP topics (e.g. Singleton, Virtual Threads, HashMap, Streams)..." class="form-input">
+                </div>
+                <div class="modal-body" id="topicsList">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Modal -->
+        <div class="modal-backdrop" id="quizModal">
+            <div class="modal-content quiz-content">
+                <div class="modal-header">
+                    <div class="quiz-header-info">
+                        <h3>🧠 Interactive Java & OOP Quiz</h3>
+                        <span id="quizScoreBadge" class="badge">Score: 0 / 0</span>
+                    </div>
+                    <button class="btn-close" id="closeQuizBtn">×</button>
+                </div>
+                <div class="modal-body" id="quizBody">
+                    <div class="quiz-card" id="quizCard">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="nextQuizBtn">Next Question ➔</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal-backdrop" id="settingsModal">
+            <div class="modal-content settings-content">
+                <div class="modal-header">
+                    <h3>⚙️ Assistant Settings</h3>
+                    <button class="btn-close" id="closeSettingsBtn">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="geminiApiKey">Optional Gemini API Key:</label>
+                        <input type="password" id="geminiApiKey" placeholder="AIzaSy..." class="form-input">
+                        <small class="helper-text">
+                            The chatbot works 100% offline with its rich built-in Java & OOP knowledge engine. Adding a Gemini API key lets you query general or open-ended topics outside the core OOP curriculum.
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label>Execution Timeout:</label>
+                        <span class="badge">8 seconds (Infinite loop protection)</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Detected Java Runtime:</label>
+                        <span class="badge" id="detectedJavaInfo">Checking...</span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="saveSettingsBtn">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
